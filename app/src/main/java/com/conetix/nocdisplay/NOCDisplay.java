@@ -22,17 +22,22 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.HttpResponse;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.methods.HttpGet;
+//import org.apache.http.impl.client.DefaultHttpClient;
+
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 
 import android.provider.Settings.Secure;
 
@@ -98,29 +103,30 @@ public class NOCDisplay extends Activity {
                 // Get Device ID
                 String android_id = Secure.getString(mContext.getContentResolver(),
                         Secure.ANDROID_ID);
-
                 Log.d("DEVICE_ID", android_id);
 
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(new URI("http://ELASTICSEARCHSERVER:9200/quickdash/" + android_id + "/1/"));
+                URL url =  new URL("http://ELASTICSEARCHSERVER:9200/quickdash/" + android_id + "/1/");
+                HttpURLConnection httpuc = (HttpURLConnection) url.openConnection();
 
-                HttpResponse response = client.execute(request);
-                InputStream ips = response.getEntity().getContent();
-
+                // Read the data by using a StringBuilder
+                InputStream ips = new BufferedInputStream(httpuc.getInputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(ips));
                 StringBuilder sb = new StringBuilder();
-
                 String line = null;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line + "\n");
-                }
 
+                }
+                httpuc.disconnect();
+
+                // convert to a JSONObject to return
                 JSONObject jconf = new JSONObject(sb.toString());
                 return jconf;
 
+
+
             } catch (Exception e) {
-                Log.e("Failed to get the JSON config", e.toString());
+                Log.e("Failed to get JSON", e.toString());
                 e.printStackTrace();
                 return new JSONObject();
             }
