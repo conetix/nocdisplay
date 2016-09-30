@@ -22,12 +22,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-//import org.apache.http.HttpResponse;
-//import org.apache.http.client.HttpClient;
-//import org.apache.http.client.methods.HttpGet;
-//import org.apache.http.impl.client.DefaultHttpClient;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,8 +30,12 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
+
+
+import org.xwalk.core.XWalkActivity;
+import org.xwalk.core.XWalkPreferences;
+import org.xwalk.core.XWalkView;
 
 import android.provider.Settings.Secure;
 
@@ -80,8 +78,8 @@ public class NOCDisplay extends Activity {
 
     public void OpenURL(String URL){
         try {
-            WebView webView = (WebView) findViewById(R.id.fullscreen_content);
-            webView.loadUrl(URL);
+            XWalkView xWalkWebView =(XWalkView)findViewById(R.id.xwalkWebView);
+            xWalkWebView.load(URL, null);
         }
         catch (Exception e) {
             Log.e("URL Error:", e.toString());
@@ -167,30 +165,10 @@ public class NOCDisplay extends Activity {
         setContentView(R.layout.activity_nocdisplay);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final View contentView = findViewById(R.id.fullscreen_content);
+        final View contentView = findViewById(R.id.xwalkWebView);
 
-        WebView webView = (WebView) findViewById(R.id.fullscreen_content);
-        webView.getSettings().setJavaScriptEnabled(true);
-
-        //webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient());
-
-        webView.setWebViewClient(new WebViewClient() {
-                                     @Override
-                                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                                         view.loadUrl(url);
-                                         return false; // then it is not handled by default action
-                                     }
-
-                                     @Override
-                                     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                                         Log.d("SSL", "ERROR "+ error);
-                                         handler.proceed(); // Ignore SSL certificate errors
-                                     }
-                                 }
-        );
+        XWalkView xWalkWebView =(XWalkView)findViewById(R.id.xwalkWebView);
+        XWalkPreferences.setValue(XWalkPreferences.REMOTE_DEBUGGING, true);
 
         JSONConfig jdata = new JSONConfig(this);
         jdata.execute();
