@@ -25,4 +25,10 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:24.+'
+    compile 'org.xwalk:xwalk_core_library:21.51.546.6'
+}
+repositories {
+    maven {
+        url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2'
+    }
 }
