@@ -16,11 +16,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +28,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-import org.xwalk.core.XWalkActivity;
 import org.xwalk.core.XWalkPreferences;
 import org.xwalk.core.XWalkView;
 
