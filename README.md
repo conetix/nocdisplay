@@ -16,4 +16,4 @@ This code is released under the MIT license.
 
 ## Build Environment
 
-This has been written using Android Studio 0.8.6 under a Linux environment with the Android SDK version 20 and targetted against version 13 and higher.
+This has been written using Android Studio 2.2 under a Linux environment with the Android SDK version 24 and targeted against version 13 and higher.
